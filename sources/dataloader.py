@@ -14,7 +14,7 @@ class DataLoaderSegmentation(torch.utils.data.dataset.Dataset):
         self.label_files = []
         for img_path in self.img_files:
             image_filename, _ = os.path.splitext(os.path.basename(img_path))
-            label_filename_with_ext = f"{image_filename}.png"
+            label_filename_with_ext = "{}.png".format(image_filename)
             self.label_files.append(os.path.join(folder_path, 'Labels', label_filename_with_ext))
 
         # Data augmentation and normalization for training
@@ -22,6 +22,7 @@ class DataLoaderSegmentation(torch.utils.data.dataset.Dataset):
         if "val" == mode :
             self.transforms = transforms.Compose([
                 transforms.CenterCrop((224, 224)),
+                # transforms.Resize([224, 224]),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406, 0], [0.229, 0.224, 0.225, 1])
             ])
@@ -29,6 +30,7 @@ class DataLoaderSegmentation(torch.utils.data.dataset.Dataset):
             self.transforms = transforms.Compose([
                     transforms.RandomHorizontalFlip(),
                     transforms.RandomVerticalFlip(),
+                    # transforms.Resize([224, 224]),
                     # transforms.RandomResizedCrop((512, 512)),
                     transforms.RandomCrop((224, 224)),
                     transforms.ToTensor(),
@@ -62,7 +64,6 @@ class DataLoaderSegmentation(torch.utils.data.dataset.Dataset):
 
             # Normalize back from [0, 1] to [0, 255]
             label = label * 255
-            #  Convert to int64 and remove second dimension
             label = label.long().squeeze()
 
             return image, label

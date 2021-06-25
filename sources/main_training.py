@@ -65,9 +65,8 @@ def main(data_dir, dest_dir, num_classes, batch_size, num_epochs, keep_feature_e
 
     # Setup the loss function
     criterion = nn.CrossEntropyLoss(weight=(torch.FloatTensor(weight).to(device) if weight else None))
-
-    # Prepare output directory
     pathlib.Path(dest_dir).mkdir(parents=True, exist_ok=True)
+    # os.mkdir(dest_dir)
 
     print("Train...")
 

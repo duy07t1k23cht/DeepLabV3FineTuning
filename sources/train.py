@@ -4,6 +4,7 @@ import numpy as np
 import time
 import copy
 import cv2
+from tqdm import tqdm
 
 def debug_export_before_forward(inputs, labels, idx):
     # im = inputs[0]*255;
@@ -17,8 +18,8 @@ def debug_export_before_forward(inputs, labels, idx):
     la = labels[0].to(torch.uint8).to('cpu').numpy()
     im = im.transpose([1, 2, 0])
     im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
-    cv2.imwrite(f"{idx:06}_im.png", im)
-    cv2.imwrite(f"{idx:06}_la.png", la)
+    cv2.imwrite("{}_im.png".format(idx), im)
+    cv2.imwrite("{}_la.png".format(idx), la)
 
 
 def iou(pred, target, n_classes = 3):
@@ -63,7 +64,7 @@ def train_model(model, num_classes, dataloaders, criterion, optimizer, device, d
             running_iou_means = []
 
             # Iterate over data.
-            for inputs, labels in dataloaders[phase]:
+            for inputs, labels in tqdm(dataloaders[phase], desc=phase):
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -71,9 +72,6 @@ def train_model(model, num_classes, dataloaders, criterion, optimizer, device, d
                 if 1 == inputs.shape[0]:
                     print("Skipping iteration because batch_size = 1")
                     continue
-
-                # Debug
-                # debug_export_before_forward(inputs, labels, counter)
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
@@ -118,8 +116,8 @@ def train_model(model, num_classes, dataloaders, criterion, optimizer, device, d
             # Save current model every 25 epochs
             # if 0 == epoch%25:
             if phase == "val":
-                current_model_path = os.path.join(dest_dir, f"checkpoint_ep{epoch:03}_loss{epoch_loss:.4}_acc{epoch_acc:.4}.pth")
-                print(f"Save current model : {current_model_path}")
+                current_model_path = os.path.join(dest_dir, "checkpoint_ep{}_loss{:.4f}_acc{:.4f}.pth".format(epoch, epoch_loss, epoch_acc))
+                print("Save current model : {}".format(current_model_path))
                 torch.save(model.state_dict(), current_model_path)
 
         print()
