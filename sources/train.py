@@ -116,10 +116,10 @@ def train_model(model, num_classes, dataloaders, criterion, optimizer, device, d
                 val_acc_history.append(epoch_acc)
 
             # Save current model every 25 epochs
-            if 0 == epoch%25:
-                current_model_path = os.path.join(dest_dir, f"checkpoint_{epoch:04}_DeepLabV3_Skydiver.pth")
-                print(f"Save current model : {current_model_path}")
-                torch.save(model.state_dict(), current_model_path)
+            # if 0 == epoch%25:
+            current_model_path = os.path.join(dest_dir, f"checkpoint_{epoch:04}_DeepLabV3_Skydiver.pth")
+            print(f"Save current model : {current_model_path}")
+            torch.save(model.state_dict(), current_model_path)
 
         print()
 
