@@ -21,8 +21,8 @@ class DataLoaderSegmentation(torch.utils.data.dataset.Dataset):
         # Just normalization for validation
         if "val" == mode :
             self.transforms = transforms.Compose([
-                transforms.CenterCrop((224, 224)),
-                # transforms.Resize([224, 224]),
+                # transforms.CenterCrop((224, 224)),
+                transforms.Resize([224, 224]),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406, 0], [0.229, 0.224, 0.225, 1])
             ])
@@ -30,9 +30,9 @@ class DataLoaderSegmentation(torch.utils.data.dataset.Dataset):
             self.transforms = transforms.Compose([
                     transforms.RandomHorizontalFlip(),
                     transforms.RandomVerticalFlip(),
-                    # transforms.Resize([224, 224]),
+                    transforms.Resize([224, 224]),
                     # transforms.RandomResizedCrop((512, 512)),
-                    transforms.RandomCrop((224, 224)),
+                    # transforms.RandomCrop((224, 224)),
                     transforms.ToTensor(),
                     transforms.Normalize([0.485, 0.456, 0.406, 0], [0.229, 0.224, 0.225, 1])
                 ])

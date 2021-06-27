@@ -114,9 +114,9 @@ def train_model(model, num_classes, dataloaders, criterion, optimizer, device, d
                 val_acc_history.append(epoch_acc)
 
             # Save current model every 25 epochs
-            # if 0 == epoch%25:
-            if phase == "val":
-                current_model_path = os.path.join(dest_dir, "checkpoint_ep{}_loss{:.4f}_acc{:.4f}.pth".format(epoch, epoch_loss, epoch_acc))
+            if 0 == epoch % 5 and phase == "val":
+            # if phase == "val":
+                current_model_path = os.path.join(dest_dir, "checkpoint_2806_ep{}_loss{:.4f}_acc{:.4f}.pth".format(epoch, epoch_loss, epoch_acc))
                 print("Save current model : {}".format(current_model_path))
                 torch.save(model.state_dict(), current_model_path)
 
